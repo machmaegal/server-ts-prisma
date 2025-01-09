@@ -1,0 +1,12 @@
+//run after changes to model >> npx prisma generate << to update prisma client
+//npx prisma migrate dev --name add-a-name << to update data base
+
+model RecipeFoodItem {
+    id           String   @id @default(cuid())
+    recipe       Recipe   @relation(fields: [recipeId], references: [id])
+    recipeId     String
+    ingredient   FoodItem @relation(fields: [ingredientId], references: [id])
+    ingredientId String
+
+    @@unique([recipeId, ingredientId])
+}

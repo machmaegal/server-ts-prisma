@@ -1,6 +1,6 @@
 import { Application, Request, Response, NextFunction } from 'express';
 
-export = (app: Application) => {
+const handleErrors = (app: Application) => {
   app.use((req: Request, res: Response, next: NextFunction) => {
     // this middleware runs whenever requested page is not available
     res.status(404).json({ message: "This route does not exist" });
@@ -21,3 +21,5 @@ export = (app: Application) => {
     }
   });
 };
+
+export default handleErrors
