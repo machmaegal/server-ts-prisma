@@ -1,4 +1,4 @@
-//run after changes to model >> npx prisma generate << to update prisma client
+//run after changes to model to update database: npx prisma migrate dev --name <add-a-name> 
 
 model Recipe {
     id          String           @id @default(cuid())

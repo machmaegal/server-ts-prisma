@@ -1,37 +1,25 @@
-// We reuse this import in order to have access to the `body` property in requests
-import express, { Application } from 'express';
-
-// ℹ️ Responsible for the messages you see in the terminal as requests are coming in
-// https://www.npmjs.com/package/morgan
-import morgan from 'morgan';
-
-// ℹ️ Needed when we deal with cookies (we will when dealing with authentication)
-// https://www.npmjs.com/package/cookie-parser
-import cookieParser from "cookie-parser";
-
-// ℹ️ Needed to accept from requests from 'the outside'. CORS stands for cross origin resource sharing
-// unless the request if from the same domain, by default express wont accept POST requests
+import express, { Application } from 'express'; //access to req.body
+import morgan from 'morgan'; //logging tool
+import cookieParser from "cookie-parser"; //handle cookies / authentication
 import cors from 'cors'
 
 const FRONTEND_URL = process.env.ORIGIN || "http://localhost:3000";
 
-// Middleware configuration
+//middleware
 const configureApp = (app: Application): void => {
-  // Because this is a server that will accept requests from outside and it will be hosted ona server with a `proxy`, express needs to know that it should trust that setting.
-  // Services like heroku use something called a proxy and you need to add this to your server
-  app.set('trust proxy', 1);
 
-  // controls a very specific header to pass headers from the frontend
+  app.set('trust proxy', 1); //needed for hosting on webservice platform
+
   app.use(
     cors({
-      origin: [FRONTEND_URL]
+      origin: [FRONTEND_URL] //trusted urls inside
     })
   );
 
-  // In development environment the app logs
+  //app logs in dev environment
   app.use(morgan('dev'));
 
-  // To have access to `body` property in the request
+  //access to req.body
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());

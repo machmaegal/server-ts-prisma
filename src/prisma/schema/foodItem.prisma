@@ -1,9 +1,8 @@
-//run after changes to model >> npx prisma generate << to update prisma client
-//npx prisma migrate dev --name add-a-name << to update data base
+//run after changes to model to update database: npx prisma migrate dev --name <add-a-name> 
 
 model FoodItem {
     id        String           @id @default(cuid())
-    name      String
+    name      String           @unique
     calories  Int
     fat       Float
     carbs     Float
