@@ -70,7 +70,7 @@ userRouter.put('/:userId', (req: Request, res: Response, next: NextFunction) => 
         })
 })
 
-userRouter.delete('/userId', (req: Request, res: Response, next: NextFunction) => {
+userRouter.delete('/:userId', (req: Request, res: Response, next: NextFunction) => {
     prisma.user.delete({ where: { id: req.params.userId } })
         .then(() => {
             res.json({ messsage: 'user deleted' })
