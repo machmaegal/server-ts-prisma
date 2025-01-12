@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../db/index'
+import { log } from 'console';
 
 const foodRouter = Router()
 
@@ -16,7 +17,20 @@ foodRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
 
     prisma.foodItem.create({ data: newFoodItem })
         .then(food => {
-            console.log('new user created', food)
+            console.log('new ingredient created', food)
+            res.status(201).json(food);
+        })
+        .catch(err => {
+            console.log('Error creating foodItem', err);
+            res.status(500).json({ message: 'Error creating new ingredient' });
+        });
+})
+
+foodRouter.post('/alot', (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body)
+    prisma.foodItem.createMany({ data: req.body, skipDuplicates: true })
+        .then(food => {
+            console.log('new ingredient created', food)
             res.status(201).json(food);
         })
         .catch(err => {
