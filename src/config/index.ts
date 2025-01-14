@@ -3,7 +3,7 @@ import morgan from 'morgan'; //logging tool
 import cookieParser from "cookie-parser"; //handle cookies / authentication
 import cors from 'cors'
 
-const FRONTEND_URL = process.env.ORIGIN || "http://localhost:3000";
+const FRONTEND_URL = process.env.ORIGIN || "http://localhost:5173";
 
 //middleware
 const configureApp = (app: Application): void => {

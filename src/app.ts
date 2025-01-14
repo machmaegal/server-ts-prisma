@@ -20,8 +20,8 @@ configureApp(app);
 // handle routes 
 app.use('/', indexRouter);
 app.use('/auth', authRouter)
-app.use('/users', userRouter);
-app.use('/ingredients', foodRouter)
+app.use('/users', isAuthenticated, userRouter);
+app.use('/ingredients', isAuthenticated, foodRouter)
 
 handleErrors(app)
 

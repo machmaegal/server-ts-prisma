@@ -50,6 +50,22 @@ userRouter.get('/:userId', (req: Request, res: Response, next: NextFunction) => 
         })
 })
 
+userRouter.get('/:email', (req: Request, res: Response, next: NextFunction) => {
+    prisma.user.findUnique({ where: { email: req.params.email } })
+        .then(user => {
+            if (!user) {
+                res.status(404).json({ message: 'User not found' });
+            } else {
+                res.json(user);
+            }
+        })
+        .catch(err => {
+            console.error('Error getting user from DB', err);
+            res.status(500).json({ message: 'Error getting user from DB' });
+        });
+});
+
+
 userRouter.put('/:userId', (req: Request, res: Response, next: NextFunction) => {
 
     const { email, password, isAdmin } = req.body
