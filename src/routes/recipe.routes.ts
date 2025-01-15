@@ -39,4 +39,20 @@ recipeRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
         })
 })
 
+recipeRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    prisma.recipe.delete({
+        where: { id: id }
+    })
+        .then(deletedRecipe => {
+            console.log('Recipe deleted successfully:', deletedRecipe);
+            res.status(200).json({ message: 'Recipe deleted successfully', deletedRecipe });
+        })
+        .catch(err => {
+            console.log('Error deleting recipe:', err);
+            res.status(500).json({ message: 'Error deleting recipe' });
+        });
+});
+
 export default recipeRouter
