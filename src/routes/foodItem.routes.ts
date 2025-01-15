@@ -39,6 +39,8 @@ foodRouter.post('/alot', (req: Request, res: Response, next: NextFunction) => {
 })
 
 foodRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
+    const search = req.query.search as string;
+
     prisma.foodItem.findMany()
         .then(allIngredients => {
             res.json(allIngredients)

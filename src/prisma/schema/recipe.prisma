@@ -1,13 +1,11 @@
 //run after changes to model to update database: npx prisma migrate dev --name <add-a-name> 
 
 model Recipe {
-    id          String           @id @default(cuid())
-    title       String
-    prepTime    Int?
-    description String?
-    creatorId   String
-    creator     User             @relation(fields: [creatorId], references: [id])
-    ingredients RecipeFoodItem[]
-    createdAt   DateTime         @default(now())
-    updatedAt   DateTime         @updatedAt
+    id            String   @id @default(cuid())
+    creatorId     String
+    creator       User     @relation(fields: [creatorId], references: [id])
+    ingredients   Json
+    totalCalories Int
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
 }

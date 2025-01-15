@@ -7,6 +7,7 @@ import userRouter from './routes/user.routes';
 import foodRouter from './routes/foodItem.routes';
 import handleErrors from './error-handling';
 import isAuthenticated from './config/jwt.middleware';
+import recipeRouter from './routes/recipe.routes';
 
 // access .env
 dotenv.config();
@@ -22,6 +23,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter)
 app.use('/users', isAuthenticated, userRouter);
 app.use('/ingredients', isAuthenticated, foodRouter)
+app.use('/recipes', isAuthenticated, recipeRouter)
 
 handleErrors(app)
 
