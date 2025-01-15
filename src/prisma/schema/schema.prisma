@@ -4,8 +4,7 @@
 //run after changes to schema file to update prisma client: npx prisma generate 
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
