@@ -102,4 +102,65 @@ authRouter.get('/verify', isAuthenticated, async (req: Request, res: Response, n
     }
 });
 
+authRouter.put('/update', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.payload?.id;
+    const { email, password } = req.body;
+
+    if (!email && !password) {
+        res.status(400).json({ message: 'Provide email or password to update.' });
+        return;
+    }
+
+    try {
+        const foundUser = await prisma.user.findUnique({ where: { id: userId } });
+
+        if (!foundUser) {
+            res.status(404).json({ message: 'User not found.' });
+            return;
+        }
+
+        const updates: { password?: string; email?: string } = {};
+        let hasChanges = false;
+
+        if (email && email !== foundUser.email) {
+            if (!emailRegex.test(email)) {
+                res.status(400).json({ message: 'Provide a valid email address.' });
+                return;
+            }
+
+            const emailExists = await prisma.user.findUnique({ where: { email } });
+            if (emailExists) {
+                res.status(400).json({ message: 'Email is already in use.' });
+                return;
+            }
+
+            updates.email = email;
+            hasChanges = true;
+        }
+
+        if (password && !bcrypt.compareSync(password, foundUser.password)) {
+            const salt = bcrypt.genSaltSync(saltRounds);
+            updates.password = bcrypt.hashSync(password, salt);
+            hasChanges = true;
+        }
+
+        if (!hasChanges) {
+            res.status(400).json({ message: 'No changes detected.' });
+            return;
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: updates,
+        });
+
+        res.status(200).json({ message: 'Profile updated successfully.', user: { email: updatedUser.email } });
+        return;
+    } catch (err) {
+        console.error('Error in updating profile', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+        return;
+    }
+});
+
 export default authRouter
